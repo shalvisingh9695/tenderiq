@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(to bottom right, #FFF7ED, #F8FAFC);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #1E293B;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Poppins', 'Inter', sans-serif;
+  }
+}
+
+/* Glassmorphism SaaS UI styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #FFEDD5;
+  box-shadow: 0 4px 12px -2px rgba(249, 115, 22, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  border-radius: 0.75rem;
+}
+
+.glass-card-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -4px rgba(249, 115, 22, 0.10), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  border-color: #FDBA74;
+}
+
+.bg-orange-primary {
+  background-color: #F97316;
+}
+
+.text-gradient-orange {
+  background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-primary-orange {
+  background: linear-gradient(to right, #FB923C, #F97316);
+  color: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+}
+
+.btn-primary-orange:hover {
+  background: linear-gradient(to right, #F97316, #EA580C);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+  transform: translateY(-1px);
+}
+
+
+

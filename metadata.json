@@ -1,0 +1,6 @@
+{
+  "name": "TenderIQ",
+  "description": "Premium AI-powered Tender & Procurement Assistant foundation with intelligent file upload system and decision dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
