@@ -99,7 +99,12 @@ export const CompanyProfileForm = ({ onSaveAndEvaluate, isLoading, initialProfil
     };
 
     // Log submitted data to console as required
+<<<<<<< HEAD
     setSuccessMessage('Company profile saved successfully!');
+=======
+    console.log("Company Profile Submitted:", profileData);
+    setSuccessMessage('Company profile saved to local state and logged to console!');
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
     if (onSaveAndEvaluate) {
       onSaveAndEvaluate(profileData);

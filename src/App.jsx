@@ -4,7 +4,10 @@ import { HomePage } from './components/HomePage';
 import { UploadPage } from './components/UploadPage';
 import { DashboardPage } from './components/DashboardPage';
 import { Footer } from './components/Footer';
+<<<<<<< HEAD
 import { safeFetchJson } from './utils/apiHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -15,9 +18,18 @@ export default function App() {
   const fetchTenders = async () => {
     try {
       setIsLoadingTenders(true);
+<<<<<<< HEAD
       const data = await safeFetchJson('/api/tenders');
       if (data.success && Array.isArray(data.data)) {
         setDocuments(data.data);
+=======
+      const res = await fetch('/api/tenders');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          setDocuments(data.data);
+        }
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       }
     } catch (err) {
       console.error('Failed to fetch tenders from backend:', err);
@@ -40,8 +52,13 @@ export default function App() {
 
   const handleDeleteDocument = async (id) => {
     try {
+<<<<<<< HEAD
       const data = await safeFetchJson(`/api/tenders/${id}`, { method: 'DELETE' });
       if (data.success) {
+=======
+      const res = await fetch(`/api/tenders/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         setDocuments((prev) => prev.filter((doc) => doc.id !== id));
       }
     } catch (err) {
@@ -68,8 +85,12 @@ export default function App() {
         {currentPage === 'upload' && (
           <UploadPage 
             onUploadSuccess={handleUploadSuccess} 
+<<<<<<< HEAD
             onNavigate={setCurrentPage}
             documents={documents}
+=======
+            onNavigate={setCurrentPage} 
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           />
         )}
 

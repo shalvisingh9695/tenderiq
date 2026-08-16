@@ -1,6 +1,9 @@
 import React from 'react';
 import { Building2, FileText, MapPin, Tag, Landmark, ShieldCheck } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const TenderOverviewCard = ({ basicInfo = {} }) => {
   const {
@@ -16,6 +19,7 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
     status
   } = basicInfo;
 
+<<<<<<< HEAD
   const categoryText = extractText(procurementCategory, 'Procurement');
   const refText = extractText(referenceId);
   const titleText = extractText(title, 'Tender Document');
@@ -27,6 +31,8 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
   const locText = extractText(location, 'Not Specified');
   const typeText = extractText(tenderType, 'Open Tender / RFP');
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   return (
     <div className="glass-card p-6 rounded-2xl border border-orange-100/90 space-y-6">
       
@@ -35,23 +41,39 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
         <div className="space-y-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-orange-100 text-orange-800 uppercase tracking-wide">
+<<<<<<< HEAD
               {categoryText}
             </span>
             {refText && (
               <span className="text-xs font-mono font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">
                 Ref: {refText}
+=======
+              {procurementCategory || 'Procurement'}
+            </span>
+            {referenceId && (
+              <span className="text-xs font-mono font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">
+                Ref: {referenceId}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
               </span>
             )}
           </div>
           <h2 className="font-heading font-bold text-slate-900 text-xl sm:text-2xl leading-snug">
+<<<<<<< HEAD
             {titleText}
+=======
+            {title || 'Tender Document'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </h2>
         </div>
 
         <div className="shrink-0 flex items-center gap-2">
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
+<<<<<<< HEAD
             {statusText}
+=======
+            {status || 'Active Tender'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </span>
         </div>
       </div>
@@ -66,10 +88,17 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
             Procuring Authority
           </span>
           <p className="font-bold text-slate-900 text-sm truncate">
+<<<<<<< HEAD
             {authorityText}
           </p>
           {deptText && (
             <p className="text-[11px] text-slate-500 truncate">{deptText}</p>
+=======
+            {procuringAuthority || 'Unspecified'}
+          </p>
+          {department && (
+            <p className="text-[11px] text-slate-500 truncate">{department}</p>
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           )}
         </div>
 
@@ -80,7 +109,11 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
             Estimated Tender Value
           </span>
           <p className="font-heading font-extrabold text-orange-950 text-base sm:text-lg">
+<<<<<<< HEAD
             {valueText ? `${valueText} ${currencyText}`.trim() : 'Under Evaluation'}
+=======
+            {estimatedValue ? `${estimatedValue} ${currency || ''}`.trim() : 'Under Evaluation'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
           <p className="text-[10px] text-orange-700/80">Inclusive of specified scopes</p>
         </div>
@@ -92,7 +125,11 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
             Project Location
           </span>
           <p className="font-bold text-slate-900 text-sm truncate">
+<<<<<<< HEAD
             {locText}
+=======
+            {location || 'Not Specified'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
           <p className="text-[10px] text-slate-400">Regional jurisdiction</p>
         </div>
@@ -104,7 +141,11 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
             Procurement Method
           </span>
           <p className="font-bold text-slate-900 text-sm truncate">
+<<<<<<< HEAD
             {typeText}
+=======
+            {tenderType || 'Open Tender / RFP'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
           <p className="text-[10px] text-slate-400">Competitive Bidding</p>
         </div>
@@ -114,4 +155,7 @@ export const TenderOverviewCard = ({ basicInfo = {} }) => {
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

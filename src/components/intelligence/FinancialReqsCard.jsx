@@ -1,6 +1,9 @@
 import React from 'react';
 import { DollarSign, ShieldCheck, CreditCard, Landmark, FileText, ExternalLink } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText, extractTextList } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) => {
   const {
@@ -15,9 +18,16 @@ export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) 
 
   const renderFinancialMetric = (label, obj, icon) => {
     if (!obj) return null;
+<<<<<<< HEAD
     const val = extractText(obj);
     if (!val) return null;
 
+=======
+    const val = typeof obj === 'string' ? obj : obj.value;
+    if (!val) return null;
+
+    const sourceText = typeof obj === 'object' ? (obj.sourceText || obj.source) : null;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     const section = typeof obj === 'object' ? obj.section : null;
     const page = typeof obj === 'object' ? obj.page : null;
 
@@ -35,8 +45,13 @@ export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) 
 
         <div className="flex items-center justify-between pt-2 border-t border-orange-200/40 text-[11px] text-slate-500">
           <div className="flex items-center gap-1.5 truncate max-w-[180px]">
+<<<<<<< HEAD
             {section && <span className="font-medium text-slate-700">{extractText(section)}</span>}
             {page && <span>Pg {extractText(page)}</span>}
+=======
+            {section && <span className="font-medium text-slate-700">{section}</span>}
+            {page && <span>Pg {page}</span>}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </div>
 
           {onOpenSource && (typeof obj === 'object') && (
@@ -53,9 +68,12 @@ export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) 
     );
   };
 
+<<<<<<< HEAD
   const paymentTermsText = extractText(paymentTerms);
   const thresholdsList = extractTextList(otherThresholds);
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   return (
     <div className="glass-card p-6 rounded-2xl border border-orange-100/90 space-y-6">
       
@@ -86,24 +104,40 @@ export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) 
       </div>
 
       {/* Payment Terms & Financial Thresholds */}
+<<<<<<< HEAD
       {paymentTermsText && (
+=======
+      {paymentTerms && (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         <div className="bg-slate-50/80 p-4 rounded-xl border border-slate-100 space-y-1.5">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
             Extracted Payment Terms & Milestones
           </span>
           <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+<<<<<<< HEAD
             {paymentTermsText}
+=======
+            {paymentTerms}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
         </div>
       )}
 
+<<<<<<< HEAD
       {thresholdsList.length > 0 && (
+=======
+      {otherThresholds.length > 0 && (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         <div className="space-y-1.5">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
             Other Financial Thresholds & Penalties
           </span>
           <div className="flex flex-wrap gap-2">
+<<<<<<< HEAD
             {thresholdsList.map((threshold, idx) => (
+=======
+            {otherThresholds.map((threshold, idx) => (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
               <span key={idx} className="px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200/80 rounded-lg text-xs font-medium">
                 {threshold}
               </span>
@@ -115,4 +149,7 @@ export const FinancialReqsCard = ({ financialRequirements = {}, onOpenSource }) 
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

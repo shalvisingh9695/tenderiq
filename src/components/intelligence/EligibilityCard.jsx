@@ -1,6 +1,9 @@
 import React from 'react';
 import { Award, CheckCircle2, AlertCircle, FileText, Globe, Building, ShieldCheck, ExternalLink } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText, extractTextList } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
   const {
@@ -22,12 +25,23 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
   const renderRequirementItem = (title, reqObj, icon) => {
     if (!reqObj) return null;
 
+<<<<<<< HEAD
     const value = extractText(reqObj);
     if (!value) return null;
 
     const mandatory = typeof reqObj === 'object' && reqObj.mandatory !== undefined ? reqObj.mandatory : true;
     const section = typeof reqObj === 'object' ? reqObj.section : null;
     const page = typeof reqObj === 'object' ? reqObj.page : null;
+=======
+    const value = typeof reqObj === 'string' ? reqObj : reqObj.value;
+    if (!value) return null;
+
+    const mandatory = typeof reqObj === 'object' ? reqObj.mandatory : true;
+    const sourceText = typeof reqObj === 'object' ? (reqObj.sourceText || reqObj.source) : null;
+    const section = typeof reqObj === 'object' ? reqObj.section : null;
+    const page = typeof reqObj === 'object' ? reqObj.page : null;
+    const confidence = typeof reqObj === 'object' ? reqObj.confidence : null;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
     return (
       <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-100/90 space-y-2 hover:border-orange-200 transition-all flex flex-col justify-between">
@@ -54,10 +68,17 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
             {section && (
               <span className="flex items-center gap-1 font-medium text-slate-600">
                 <FileText className="w-3 h-3 text-orange-500 shrink-0" />
+<<<<<<< HEAD
                 {extractText(section)}
               </span>
             )}
             {page && <span>Pg {extractText(page)}</span>}
+=======
+                {section}
+              </span>
+            )}
+            {page && <span>Pg {page}</span>}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </div>
 
           {onOpenSource && (typeof reqObj === 'object') && (
@@ -74,12 +95,15 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
     );
   };
 
+<<<<<<< HEAD
   const certificationsList = extractTextList(requiredCertifications);
   const msmeText = extractText(msmeConditions);
   const consortiumText = extractText(consortiumConditions);
   const geographicText = extractText(geographicEligibility);
   const oemText = extractText(oemRequirements);
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   return (
     <div className="glass-card p-6 rounded-2xl border border-orange-100/90 space-y-6">
       
@@ -114,11 +138,19 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
         {/* Required Certifications */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+<<<<<<< HEAD
             Required Certifications ({certificationsList.length})
           </label>
           {certificationsList.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
               {certificationsList.map((cert, idx) => (
+=======
+            Required Certifications ({requiredCertifications.length})
+          </label>
+          {requiredCertifications.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {requiredCertifications.map((cert, idx) => (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
                 <span key={idx} className="px-2.5 py-1 bg-amber-50 text-amber-900 border border-amber-200/80 rounded-lg text-xs font-medium">
                   {cert}
                 </span>
@@ -135,6 +167,7 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
             MSME / Joint Venture Terms
           </label>
           <div className="space-y-1.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+<<<<<<< HEAD
             {msmeText && (
               <p><span className="font-bold text-slate-900">MSME:</span> {msmeText}</p>
             )}
@@ -142,6 +175,15 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
               <p><span className="font-bold text-slate-900">JV/Consortium:</span> {consortiumText}</p>
             )}
             {!msmeText && !consortiumText && (
+=======
+            {msmeConditions && (
+              <p><span className="font-bold text-slate-900">MSME:</span> {msmeConditions}</p>
+            )}
+            {consortiumConditions && (
+              <p><span className="font-bold text-slate-900">JV/Consortium:</span> {consortiumConditions}</p>
+            )}
+            {!msmeConditions && !consortiumConditions && (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
               <p className="text-slate-400 italic">Standard single-bidder rules apply.</p>
             )}
           </div>
@@ -153,6 +195,7 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
             Geographic & OEM Terms
           </label>
           <div className="space-y-1.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+<<<<<<< HEAD
             {geographicText && (
               <p className="flex items-start gap-1">
                 <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
@@ -163,6 +206,18 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
               <p><span className="font-bold text-slate-900">OEM:</span> {oemText}</p>
             )}
             {!geographicText && !oemText && (
+=======
+            {geographicEligibility && (
+              <p className="flex items-start gap-1">
+                <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                <span>{geographicEligibility}</span>
+              </p>
+            )}
+            {oemRequirements && (
+              <p><span className="font-bold text-slate-900">OEM:</span> {oemRequirements}</p>
+            )}
+            {!geographicEligibility && !oemRequirements && (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
               <p className="text-slate-400 italic">No geographic/OEM restrictions detected.</p>
             )}
           </div>
@@ -173,4 +228,7 @@ export const EligibilityCard = ({ eligibility = {}, onOpenSource }) => {
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

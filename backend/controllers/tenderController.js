@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import path from 'path';
 import fs from 'fs';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 import { TenderModel } from '../models/tenderModel.js';
 import { TenderAnalysisService } from '../services/tenderAnalysisService.js';
 import { RiskIntelligenceService } from '../services/riskIntelligenceService.js';
 import { DecisionEngineService } from '../services/decisionEngineService.js';
+<<<<<<< HEAD
 import { ChatService } from '../services/chatService.js';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export async function getAllTenders(req, res) {
   try {
@@ -90,6 +96,7 @@ export async function analyzeTender(req, res) {
       );
       const deadlineDisplay = subDeadlineObj ? subDeadlineObj.originalText : 'Specified in tender';
 
+<<<<<<< HEAD
       // Auto-compute Risk Intelligence in tandem with structured analysis for instant dashboard insights
       let autoRiskReport = null;
       try {
@@ -103,15 +110,21 @@ export async function analyzeTender(req, res) {
       }
 
       // Update tender document with validated structured analysis, auto risk report and updated status
+=======
+      // Update tender document with validated structured analysis and updated status
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       const updatedTender = await TenderModel.update(targetId, {
         structuredAnalysis,
         status: 'analyzed',
         analysisStatus: 'analyzed',
         analyzedAt: new Date().toISOString(),
         analysisError: null,
+<<<<<<< HEAD
         riskReport: autoRiskReport || tender.riskReport || null,
         riskStatus: autoRiskReport ? 'completed' : (tender.riskStatus || 'not_started'),
         riskAnalyzedAt: autoRiskReport ? new Date().toISOString() : tender.riskAnalyzedAt,
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         extractedData: {
           tenderId: structuredAnalysis?.basicInformation?.referenceId || tender.extractedData?.tenderId || `TND-${targetId}`,
           organization: structuredAnalysis?.basicInformation?.procuringAuthority || tender.extractedData?.organization || 'Authority',
@@ -272,6 +285,7 @@ export async function evaluateTenderDecision(req, res) {
       });
     }
 
+<<<<<<< HEAD
     // 3. Ensure risk report exists or compute on-the-fly seamlessly
     let riskReport = tender.riskReport;
     if (!riskReport) {
@@ -305,6 +319,14 @@ export async function evaluateTenderDecision(req, res) {
           positiveSignals: []
         };
       }
+=======
+    // 3. Validate risk report exists
+    if (!tender.riskReport) {
+      return res.status(400).json({
+        success: false,
+        error: 'Risk report is missing. Please run risk intelligence analysis first before running decision evaluation.'
+      });
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     }
 
     // 4. Accept company profile from request body & validate
@@ -321,7 +343,11 @@ export async function evaluateTenderDecision(req, res) {
       tenderId: targetId,
       companyProfile,
       structuredAnalysis: tender.structuredAnalysis,
+<<<<<<< HEAD
       riskReport
+=======
+      riskReport: tender.riskReport
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     });
 
     await TenderModel.update(targetId, {
@@ -370,6 +396,7 @@ export async function deleteTender(req, res) {
     });
   }
 }
+<<<<<<< HEAD
 
 export async function chatWithTender(req, res) {
   try {
@@ -456,3 +483,5 @@ export async function serveTenderFile(req, res) {
   }
 }
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

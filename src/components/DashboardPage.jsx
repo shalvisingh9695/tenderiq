@@ -12,18 +12,25 @@ import {
   CheckCircle2,
   AlertTriangle,
   XCircle,
+<<<<<<< HEAD
   Cpu,
   MessageSquare,
   RefreshCw,
   Clock,
   Building2
+=======
+  Cpu
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 } from 'lucide-react';
 
 import { AnalysisStatusHeader } from './intelligence/AnalysisStatusHeader';
 import { ExtractionHealthCard } from './intelligence/ExtractionHealthCard';
 import { SourceViewModal } from './intelligence/SourceViewModal';
+<<<<<<< HEAD
 import { BidIntelligenceSummary } from './intelligence/BidIntelligenceSummary';
 import { InformationGapsCard } from './intelligence/InformationGapsCard';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 import { TenderOverviewCard } from './intelligence/TenderOverviewCard';
 import { DeadlineTimeline } from './intelligence/DeadlineTimeline';
 import { EligibilityCard } from './intelligence/EligibilityCard';
@@ -33,9 +40,12 @@ import { MandatoryDocsChecklist } from './intelligence/MandatoryDocsChecklist';
 import { ContractTermsCard } from './intelligence/ContractTermsCard';
 import { RiskDashboardSection } from './risk/RiskDashboardSection';
 import { DecisionSection } from './decision/DecisionSection';
+<<<<<<< HEAD
 import { ChatAssistant } from './chat/ChatAssistant';
 import PdfViewerModal from './pdf/PdfViewerModal';
 import { safeFetchJson } from '../utils/apiHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const DashboardPage = ({ 
   documents = [], 
@@ -46,7 +56,11 @@ export const DashboardPage = ({
   const [selectedDocId, setSelectedDocId] = useState(
     documents.length > 0 ? documents[0].id : ''
   );
+<<<<<<< HEAD
   const [activeViewTab, setActiveViewTab] = useState('extraction'); // 'extraction' | 'risk' | 'decision' | 'chat'
+=======
+  const [activeViewTab, setActiveViewTab] = useState('extraction'); // 'extraction' | 'risk'
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
@@ -58,6 +72,7 @@ export const DashboardPage = ({
   const [isSourceModalOpen, setIsSourceModalOpen] = useState(false);
   const [modalSourceData, setModalSourceData] = useState(null);
 
+<<<<<<< HEAD
   // PDF Viewer Modal State
   const [pdfModal, setPdfModal] = useState({
     isOpen: false,
@@ -66,6 +81,8 @@ export const DashboardPage = ({
     highlightText: ''
   });
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   const activeDoc = documents.find((doc) => doc.id === selectedDocId) || documents[0];
 
   const handleOpenSourceModal = (sourceData) => {
@@ -74,6 +91,7 @@ export const DashboardPage = ({
     setIsSourceModalOpen(true);
   };
 
+<<<<<<< HEAD
   const handleOpenPdfViewer = ({ fileUrl, page, text }) => {
     setPdfModal({
       isOpen: true,
@@ -83,6 +101,8 @@ export const DashboardPage = ({
     });
   };
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   if (documents.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center space-y-6">
@@ -125,24 +145,46 @@ export const DashboardPage = ({
     }
 
     try {
+<<<<<<< HEAD
       const data = await safeFetchJson(`/api/tenders/${activeDoc.id}/analyze`, {
+=======
+      const response = await fetch(`/api/tenders/${activeDoc.id}/analyze`, {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
 
+<<<<<<< HEAD
       // Update document with structured analysis
+=======
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Tender analysis failed. Please check Gemini API configuration.');
+      }
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       if (data.data && onUpdateDocument) {
         onUpdateDocument(data.data);
       }
     } catch (err) {
+<<<<<<< HEAD
       console.error('Tender analysis error:', err);
       setAnalysisError(err.message || 'An error occurred during analysis.');
+=======
+      console.error('Analysis error:', err);
+      setAnalysisError(err.message || 'An error occurred during AI analysis.');
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
       if (onUpdateDocument) {
         onUpdateDocument({
           ...activeDoc,
           analysisStatus: 'failed',
+<<<<<<< HEAD
           analysisError: err.message || 'Tender analysis failed.'
+=======
+          analysisError: err.message || 'AI extraction failed.'
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         });
       }
     } finally {
@@ -150,7 +192,11 @@ export const DashboardPage = ({
     }
   };
 
+<<<<<<< HEAD
   // Trigger Risk Intelligence Endpoint
+=======
+  // Trigger AI Risk Intelligence Endpoint
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   const handleRunRiskAnalysis = async () => {
     if (!activeDoc || !activeDoc.id) return;
 
@@ -166,11 +212,24 @@ export const DashboardPage = ({
     }
 
     try {
+<<<<<<< HEAD
       const data = await safeFetchJson(`/api/tenders/${activeDoc.id}/risk-analysis`, {
+=======
+      const response = await fetch(`/api/tenders/${activeDoc.id}/risk-analysis`, {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
 
+<<<<<<< HEAD
+=======
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Risk Intelligence evaluation failed.');
+      }
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       if (data.data && onUpdateDocument) {
         onUpdateDocument(data.data);
       }
@@ -202,12 +261,16 @@ export const DashboardPage = ({
     : activeDoc?.riskStatus || (activeDoc?.riskReport ? 'completed' : 'not_started');
   const currentRiskError = activeDoc?.riskError || riskAnalysisError;
   const riskReport = activeDoc?.riskReport;
+<<<<<<< HEAD
   const decisionReport = activeDoc?.decisionReport;
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
       {/* Top Header */}
+<<<<<<< HEAD
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 border-b border-slate-200/80 pb-6">
         <div className="space-y-2 max-w-3xl">
           <div className="flex items-center gap-2.5 flex-wrap">
@@ -298,6 +361,33 @@ export const DashboardPage = ({
       </div>
 
       {/* Active Document Selector Bar */}
+=======
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200/80 pb-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
+              Procurement Intelligence Dashboard
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-800 uppercase tracking-wider">
+              TenderIQ AI Engine
+            </span>
+          </div>
+          <p className="text-slate-500 text-xs sm:text-sm mt-1">
+            Clause-level extraction, eligibility rules, key dates, deposits, and penalty conditions.
+          </p>
+        </div>
+
+        <button
+          onClick={() => onNavigate('upload')}
+          className="btn-primary-orange px-4 py-2.5 rounded-xl text-xs font-bold inline-flex items-center gap-2 cursor-pointer shrink-0 self-start md:self-auto shadow-xs"
+        >
+          <Upload className="w-4 h-4" />
+          Upload New Document
+        </button>
+      </div>
+
+      {/* Document Selection Tabs */}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
@@ -348,6 +438,7 @@ export const DashboardPage = ({
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* EXECUTIVE SUMMARY: BID INTELLIGENCE BRIEF */}
       {activeDoc && (
         <BidIntelligenceSummary
@@ -361,6 +452,10 @@ export const DashboardPage = ({
 
       {/* Sub-Navigation Tabs: Extraction vs. Risk Intelligence vs Decision Engine vs Chat */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-1 flex-wrap">
+=======
+      {/* Sub-Navigation Tabs: Extraction vs. Risk Intelligence */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         <button
           onClick={() => setActiveViewTab('extraction')}
           className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
@@ -412,6 +507,7 @@ export const DashboardPage = ({
           }`}
         >
           <Cpu className="w-4 h-4" />
+<<<<<<< HEAD
           <span>Decision Engine</span>
           {decisionReport ? (
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
@@ -454,6 +550,29 @@ export const DashboardPage = ({
           fileUrl={activeDoc?.fileUrl || `/api/tenders/${activeDoc?.id}/file`}
         />
       ) : activeViewTab === 'decision' ? (
+=======
+          <span>Decision</span>
+          {activeDoc?.decisionReport ? (
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+              activeDoc.decisionReport.recommendation === 'Apply'
+                ? 'bg-emerald-100 text-emerald-800'
+                : activeDoc.decisionReport.recommendation === 'Avoid'
+                ? 'bg-rose-100 text-rose-800'
+                : 'bg-amber-100 text-amber-800'
+            }`}>
+              {activeDoc.decisionReport.recommendation}
+            </span>
+          ) : (
+            <span className="px-1.5 py-0.5 rounded text-[10px] bg-orange-100 text-orange-900 uppercase">
+              Form Ready
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* VIEW RENDER: EXTRACTION, RISK, OR DECISION ENGINE */}
+      {activeViewTab === 'decision' ? (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         <DecisionSection
           activeDoc={activeDoc}
           onUpdateTenderData={(updates) => {
@@ -472,6 +591,7 @@ export const DashboardPage = ({
           riskError={currentRiskError}
           onRunRiskAnalysis={handleRunRiskAnalysis}
           isAnalyzing={isRiskAnalyzing}
+<<<<<<< HEAD
           onOpenSource={(src) => {
             handleOpenSourceModal(src);
             if (src?.page) {
@@ -482,6 +602,9 @@ export const DashboardPage = ({
               });
             }
           }}
+=======
+          onOpenSource={handleOpenSourceModal}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           hasTenderAnalysis={Boolean(analysisData)}
         />
       ) : (
@@ -503,6 +626,7 @@ export const DashboardPage = ({
                 <ExtractionHealthCard extractionHealth={analysisData.extractionHealth} />
               )}
 
+<<<<<<< HEAD
               {/* INFORMATION GAPS SECTION */}
               <InformationGapsCard
                 informationGaps={analysisData.informationGaps || analysisData.ambiguousClauses || []}
@@ -510,6 +634,8 @@ export const DashboardPage = ({
                 onOpenPdf={handleOpenPdfViewer}
               />
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
               {/* Section 1: Tender Overview */}
               <TenderOverviewCard basicInfo={analysisData.basicInformation} />
 
@@ -600,6 +726,7 @@ export const DashboardPage = ({
         onClose={() => setIsSourceModalOpen(false)}
         sourceData={modalSourceData}
         title={activeDoc?.originalName}
+<<<<<<< HEAD
         onOpenPdf={handleOpenPdfViewer}
       />
 
@@ -610,6 +737,8 @@ export const DashboardPage = ({
         fileUrl={pdfModal.fileUrl}
         pageNumber={pdfModal.pageNumber}
         highlightText={pdfModal.highlightText}
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       />
 
     </div>

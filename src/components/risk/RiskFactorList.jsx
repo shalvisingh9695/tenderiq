@@ -6,14 +6,22 @@ export const RiskFactorList = ({ riskFactors = [], onOpenSource }) => {
   const [selectedSeverity, setSelectedSeverity] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
+<<<<<<< HEAD
   const categories = ['All', 'Eligibility', 'Financial', 'Technical', 'Documentation', 'Timeline', 'Contractual', 'Commercial'];
+=======
+  const categories = ['All', 'Financial', 'Legal', 'Operational', 'Eligibility', 'Compliance'];
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   const severities = ['All', 'Critical', 'High', 'Medium', 'Low'];
 
   const getSeverityBadge = (severity) => {
     const s = (severity || 'medium').toLowerCase();
     if (s === 'critical') {
       return (
+<<<<<<< HEAD
         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-950 border border-red-200 flex items-center gap-1">
+=======
+        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-900 border border-red-200 flex items-center gap-1">
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           <AlertCircle className="w-3 h-3 text-red-600" /> Critical
         </span>
       );
@@ -66,10 +74,17 @@ export const RiskFactorList = ({ riskFactors = [], onOpenSource }) => {
         <div>
           <h3 className="font-heading font-extrabold text-slate-900 text-lg flex items-center gap-2">
             <ShieldAlert className="w-5 h-5 text-orange-600" />
+<<<<<<< HEAD
             Detected Clause Risks ({filteredFactors.length})
           </h3>
           <p className="text-xs text-slate-500 font-medium">
             Explainable clause-level risk factors with tender evidence & page attribution
+=======
+            Detected Risk Factors ({filteredFactors.length})
+          </h3>
+          <p className="text-xs text-slate-500 font-medium">
+            Explainable clause-level risks with tender evidence & commercial impact
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
         </div>
 
@@ -120,6 +135,7 @@ export const RiskFactorList = ({ riskFactors = [], onOpenSource }) => {
       {/* Risk Items List */}
       <div className="space-y-3">
         {filteredFactors.length > 0 ? (
+<<<<<<< HEAD
           filteredFactors.map((rf, idx) => {
             const hasPage = Boolean(rf.page || rf.sourcePage);
             const pageNum = rf.page || rf.sourcePage;
@@ -193,6 +209,75 @@ export const RiskFactorList = ({ riskFactors = [], onOpenSource }) => {
               </div>
             );
           })
+=======
+          filteredFactors.map((rf, idx) => (
+            <div
+              key={idx}
+              className="bg-white/90 p-4 rounded-xl border border-slate-200/80 hover:border-orange-300 shadow-2xs hover:shadow-sm transition-all space-y-3"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-heading font-extrabold text-slate-900 text-sm sm:text-base">
+                    {rf.title}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-600">
+                    {rf.category}
+                  </span>
+                  {getSeverityBadge(rf.severity)}
+                </div>
+              </div>
+
+              {/* Explainable Why is this risky? */}
+              <div className="bg-slate-50/90 p-3 rounded-lg border border-slate-100 space-y-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  Why is this risky?
+                </span>
+                <p className="text-xs text-slate-800 leading-relaxed font-medium">
+                  {rf.explanation}
+                </p>
+              </div>
+
+              {/* Source Clause Attribution & Trigger */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-[11px] text-slate-500">
+                <div className="flex items-center gap-3 truncate max-w-xl">
+                  {rf.section && (
+                    <span className="flex items-center gap-1 font-semibold text-slate-700 shrink-0">
+                      <FileText className="w-3 h-3 text-orange-500" />
+                      {rf.section}
+                    </span>
+                  )}
+                  {rf.page && <span className="shrink-0">Page {rf.page}</span>}
+                  {rf.confidence && (
+                    <span className="text-emerald-700 font-semibold shrink-0">
+                      {Math.round(rf.confidence * 100)}% Match
+                    </span>
+                  )}
+                </div>
+
+                {onOpenSource && (
+                  <button
+                    onClick={() =>
+                      onOpenSource({
+                        value: `${rf.title} (${rf.category.toUpperCase()} RISK)`,
+                        sourceText: rf.sourceText || rf.explanation,
+                        section: rf.section,
+                        page: rf.page,
+                        confidence: rf.confidence,
+                        requirementType: rf.severity
+                      })
+                    }
+                    className="text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 text-[11px] cursor-pointer hover:underline self-end sm:self-auto shrink-0"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    View Clause Source
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         ) : (
           <div className="p-8 text-center bg-slate-50/50 rounded-xl border border-dashed border-slate-200 text-slate-500 space-y-1">
             <p className="text-sm font-semibold">No risk factors match the active filters.</p>

@@ -1,6 +1,10 @@
 {
   "name": "TenderIQ",
+<<<<<<< HEAD
   "description": "AI-powered tender analysis with RAG, risk intelligence, decision support, and document traceability.",
+=======
+  "description": "Premium AI-powered Tender & Procurement Assistant foundation with intelligent file upload system and decision dashboard.",
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

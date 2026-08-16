@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { generateContentWithRetry, GEMINI_PRIMARY_MODEL, Type } from '../config/gemini.js';
 import { parseSafeJson } from '../utils/jsonHelper.js';
 import { HeuristicExtractor } from './heuristicExtractor.js';
@@ -6,6 +7,13 @@ import { HeuristicExtractor } from './heuristicExtractor.js';
  * Tender Analysis Service using Gemini API
  * Analyzes document text and converts it into source-traceable procurement intelligence
  * with PDF page numbers, sections, and approximate positions.
+=======
+import { GoogleGenAI, Type } from '@google/genai';
+
+/**
+ * Tender Analysis Service using Gemini API
+ * Analyzes document text and converts it into source-traceable procurement intelligence.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
  */
 export class TenderAnalysisService {
   /**
@@ -15,6 +23,17 @@ export class TenderAnalysisService {
    * @returns {Promise<Object>} Normalized structured tender analysis
    */
   static async analyzeTenderText(documentText, metadata = {}) {
+<<<<<<< HEAD
+=======
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error(
+        'GEMINI_API_KEY environment variable is not configured. Please add GEMINI_API_KEY in Settings > Secrets.'
+      );
+    }
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     if (!documentText || documentText.trim().length === 0) {
       throw new Error('No text content was found in the uploaded document to analyze.');
     }
@@ -25,8 +44,22 @@ export class TenderAnalysisService {
       ? documentText.substring(0, maxChars) + '\n\n[...Document truncated for AI analysis...]'
       : documentText;
 
+<<<<<<< HEAD
     const systemPrompt = `You are TenderIQ's Enterprise Procurement Intelligence Extraction Engine.
 Your task is to analyze the provided tender/RFP document text and extract structured procurement data with exact source traceability including page references, sections, and approximate positions.
+=======
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build'
+        }
+      }
+    });
+
+    const systemPrompt = `You are TenderIQ's Enterprise Procurement Intelligence Extraction Engine.
+Your task is to analyze the provided tender/RFP document text and extract structured procurement data with exact source traceability.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 STRICT EXTRACTION & ACCURACY RULES:
 1. EXPLICIT VS CONDITIONAL VS OPTIONAL VS AMBIGUOUS:
@@ -40,11 +73,17 @@ STRICT EXTRACTION & ACCURACY RULES:
    - NEVER convert ambiguous language into a definite requirement.
 3. NUMERICAL & CURRENCY ACCURACY:
    - Preserve original currency (₹, USD, EUR, etc.) and numerical units (Lakhs, Crores, Millions, %, days, years) EXACTLY as written.
+<<<<<<< HEAD
 4. SOURCE TRACEABILITY, PAGE NUMBERS & POSITIONS:
+=======
+   - DO NOT convert ₹5 Crore to ₹5 Lakh or 10% to 10.
+4. SOURCE TRACEABILITY & PAGE NUMBERS:
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
    - For every extracted field, include:
      * "value": The extracted requirement value or text.
      * "sourceText": The exact sentence or clause snippet from the tender document.
      * "section": The section name or heading where the clause appears (e.g., "Section 3.1 Eligibility").
+<<<<<<< HEAD
      * "page": Integer page number ONLY if explicitly indicated in text or header/footer. Otherwise set to null. NEVER fabricate page numbers.
      * "approximatePosition": Position description (e.g., "Page 1, Section 3.1" or "Top 15% of document").
      * "confidence": Float between 0.0 and 1.0 representing extraction confidence.
@@ -122,6 +161,17 @@ Return ONLY a valid JSON object matching the following structure:
   },
   "ambiguousClauses": []
 }`;
+=======
+     * "page": Integer page number ONLY if explicitly indicated in text (e.g. "Page 14" or header/footer marker). Otherwise set to null. NEVER fabricate page numbers.
+     * "confidence": Float between 0.0 and 1.0 representing extraction confidence (0.90+ High, 0.70-0.89 Medium, <0.70 Low).
+5. DEADLINES:
+   - Categorize dates into types: "publication", "preBid", "clarificationDeadline", "submissionStart", "submissionDeadline", "technicalOpening", "financialOpening", "other".
+   - Store "originalText" (e.g., "30th Sept 2026 at 5:00 PM") and "normalizedDate" (YYYY-MM-DD if safely parseable, otherwise null).
+6. MANDATORY DOCUMENTS:
+   - Identify every required document, its category (Legal, Financial, Technical, Experience, Certification, Registration, Declarations, Other), whether it is mandatory vs conditional, and requirement status ("must_submit", "may_submit", "where_applicable").
+
+Return ONLY a valid JSON object matching the requested schema without markdown formatting or commentary.`;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
     const userPrompt = `Document Title/Filename: ${metadata.name || 'Tender Document'}
 
@@ -130,16 +180,174 @@ TENDER DOCUMENT TEXT:
 ${truncatedText}
 """
 
+<<<<<<< HEAD
 Extract structured procurement data according to the requested JSON schema.`;
 
     try {
       const response = await generateContentWithRetry({
         model: GEMINI_PRIMARY_MODEL,
+=======
+Extract structured procurement data according to the schema.`;
+
+    // Reusable SourceTraceable schema item
+    const sourceTraceableSchema = {
+      type: Type.OBJECT,
+      properties: {
+        value: { type: Type.STRING },
+        sourceText: { type: Type.STRING },
+        section: { type: Type.STRING },
+        page: { type: Type.INTEGER },
+        confidence: { type: Type.NUMBER },
+        requirementType: { type: Type.STRING }, // "explicit" | "conditional" | "optional" | "ambiguous"
+        isAmbiguous: { type: Type.BOOLEAN }
+      }
+    };
+
+    const responseSchema = {
+      type: Type.OBJECT,
+      properties: {
+        basicInformation: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            referenceId: { type: Type.STRING },
+            procuringAuthority: { type: Type.STRING },
+            department: { type: Type.STRING },
+            tenderType: { type: Type.STRING },
+            procurementCategory: { type: Type.STRING },
+            location: { type: Type.STRING },
+            estimatedValue: { type: Type.STRING },
+            currency: { type: Type.STRING },
+            status: { type: Type.STRING }
+          }
+        },
+        importantDates: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              type: { type: Type.STRING },
+              label: { type: Type.STRING },
+              originalText: { type: Type.STRING },
+              normalizedDate: { type: Type.STRING },
+              sourceText: { type: Type.STRING },
+              section: { type: Type.STRING },
+              page: { type: Type.INTEGER },
+              confidence: { type: Type.NUMBER }
+            }
+          }
+        },
+        eligibility: {
+          type: Type.OBJECT,
+          properties: {
+            annualTurnover: sourceTraceableSchema,
+            netWorth: sourceTraceableSchema,
+            yearsOfExperience: sourceTraceableSchema,
+            similarWorkExperience: sourceTraceableSchema,
+            technicalQualifications: { type: Type.ARRAY, items: sourceTraceableSchema },
+            requiredCertifications: { type: Type.ARRAY, items: sourceTraceableSchema },
+            requiredRegistrations: { type: Type.ARRAY, items: { type: Type.STRING } },
+            requiredLicenses: { type: Type.ARRAY, items: { type: Type.STRING } },
+            oemRequirements: sourceTraceableSchema,
+            msmeConditions: sourceTraceableSchema,
+            consortiumConditions: sourceTraceableSchema,
+            geographicEligibility: sourceTraceableSchema,
+            otherConditions: { type: Type.ARRAY, items: sourceTraceableSchema }
+          }
+        },
+        financialRequirements: {
+          type: Type.OBJECT,
+          properties: {
+            emd: sourceTraceableSchema,
+            tenderFee: sourceTraceableSchema,
+            performanceSecurity: sourceTraceableSchema,
+            securityDeposit: sourceTraceableSchema,
+            bankGuarantee: sourceTraceableSchema,
+            paymentTerms: sourceTraceableSchema,
+            otherThresholds: { type: Type.ARRAY, items: sourceTraceableSchema }
+          }
+        },
+        technicalRequirements: {
+          type: Type.OBJECT,
+          properties: {
+            scopeOfWork: sourceTraceableSchema,
+            technicalSpecifications: { type: Type.ARRAY, items: sourceTraceableSchema },
+            minimumManpower: sourceTraceableSchema,
+            equipmentRequirements: { type: Type.ARRAY, items: sourceTraceableSchema },
+            infrastructureRequirements: sourceTraceableSchema,
+            technologyRequirements: { type: Type.ARRAY, items: sourceTraceableSchema },
+            serviceLevelRequirements: { type: Type.ARRAY, items: sourceTraceableSchema },
+            deliveryRequirements: sourceTraceableSchema,
+            qualityStandards: { type: Type.ARRAY, items: sourceTraceableSchema },
+            experienceRequirements: { type: Type.ARRAY, items: sourceTraceableSchema }
+          }
+        },
+        mandatoryDocuments: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              documentName: { type: Type.STRING },
+              category: { type: Type.STRING },
+              mandatory: { type: Type.BOOLEAN },
+              conditional: { type: Type.BOOLEAN },
+              requirementType: { type: Type.STRING },
+              sourceText: { type: Type.STRING },
+              section: { type: Type.STRING },
+              page: { type: Type.INTEGER },
+              confidence: { type: Type.NUMBER }
+            }
+          }
+        },
+        commercialTerms: {
+          type: Type.OBJECT,
+          properties: {
+            contractDuration: sourceTraceableSchema,
+            renewalConditions: sourceTraceableSchema,
+            paymentSchedule: sourceTraceableSchema,
+            warrantyRequirements: sourceTraceableSchema,
+            maintenanceRequirements: sourceTraceableSchema,
+            deliverySchedule: sourceTraceableSchema,
+            liquidatedDamages: sourceTraceableSchema,
+            penalties: sourceTraceableSchema,
+            terminationConditions: sourceTraceableSchema,
+            blacklistingConditions: sourceTraceableSchema,
+            disputeResolution: sourceTraceableSchema,
+            arbitration: sourceTraceableSchema,
+            forceMajeure: sourceTraceableSchema,
+            otherObligations: { type: Type.ARRAY, items: sourceTraceableSchema }
+          }
+        },
+        ambiguousClauses: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              clauseText: { type: Type.STRING },
+              section: { type: Type.STRING },
+              page: { type: Type.INTEGER },
+              ambiguityReason: { type: Type.STRING },
+              confidence: { type: Type.NUMBER }
+            }
+          }
+        }
+      }
+    };
+
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         contents: userPrompt,
         config: {
           systemInstruction: systemPrompt,
           temperature: 0.1,
+<<<<<<< HEAD
           responseMimeType: 'application/json'
+=======
+          responseMimeType: 'application/json',
+          responseSchema
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         }
       });
 
@@ -148,6 +356,7 @@ Extract structured procurement data according to the requested JSON schema.`;
         throw new Error('Received an empty response from Gemini AI model.');
       }
 
+<<<<<<< HEAD
       const parsedData = parseSafeJson(responseText);
       return TenderAnalysisService.normalizeAnalysisResult(parsedData);
 
@@ -173,12 +382,37 @@ Extract structured procurement data according to the requested JSON schema.`;
         finalErr.status = err.status || 500;
         throw finalErr;
       }
+=======
+      const cleanedJson = responseText
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```\s*$/i, '')
+        .trim();
+
+      let parsedData;
+      try {
+        parsedData = JSON.parse(cleanedJson);
+      } catch (parseErr) {
+        console.error('Failed to parse AI response as JSON:', parseErr, responseText);
+        throw new Error('AI returned an invalid JSON response format.');
+      }
+
+      return TenderAnalysisService.normalizeAnalysisResult(parsedData);
+
+    } catch (err) {
+      console.error('TenderAnalysisService execution error:', err);
+      const cleanErr = err.message ? err.message.replace(/key=[^&]+/gi, 'key=HIDDEN') : 'AI analysis error.';
+      throw new Error(`AI Extraction failed: ${cleanErr}`);
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     }
   }
 
   /**
    * Normalizes any object/string into a consistent SourceTraceable object
+<<<<<<< HEAD
    * containing text, relevance, page, section, and approximatePosition.
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
    */
   static normalizeSourceItem(item) {
     if (!item) return null;
@@ -188,9 +422,13 @@ Extract structured procurement data according to the requested JSON schema.`;
         sourceText: null,
         section: null,
         page: null,
+<<<<<<< HEAD
         approximatePosition: null,
         confidence: 0.90,
         relevance: 0.90,
+=======
+        confidence: 0.90,
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         requirementType: 'explicit',
         isAmbiguous: false
       };
@@ -208,6 +446,7 @@ Extract structured procurement data according to the requested JSON schema.`;
       conf = Math.min(1.0, Math.max(0.0, item.confidence));
     }
 
+<<<<<<< HEAD
     let rel = conf;
     if (typeof item.relevance === 'number') {
       rel = Math.min(1.0, Math.max(0.0, item.relevance));
@@ -226,17 +465,25 @@ Extract structured procurement data according to the requested JSON schema.`;
       }
     }
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     const reqType = item.requirementType || (item.mandatory === false ? 'conditional' : 'explicit');
     const isAmbiguous = Boolean(item.isAmbiguous || reqType === 'ambiguous');
 
     return {
       value: String(value),
       sourceText: item.sourceText || item.source || item.snippet || null,
+<<<<<<< HEAD
       section: sectionVal,
       page: pageVal,
       approximatePosition: approxPos,
       confidence: conf,
       relevance: rel,
+=======
+      section: item.section || item.sectionHeading || null,
+      page: pageVal,
+      confidence: conf,
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       requirementType: reqType,
       isAmbiguous
     };
@@ -279,6 +526,7 @@ Extract structured procurement data according to the requested JSON schema.`;
           let pageVal = null;
           if (Number.isInteger(d.page)) pageVal = d.page;
 
+<<<<<<< HEAD
           const sectionVal = d.section || null;
           let approxPos = d.approximatePosition || null;
           if (!approxPos) {
@@ -290,17 +538,25 @@ Extract structured procurement data according to the requested JSON schema.`;
           const conf = typeof d.confidence === 'number' ? Math.min(1.0, Math.max(0, d.confidence)) : 0.90;
           const rel = typeof d.relevance === 'number' ? Math.min(1.0, Math.max(0, d.relevance)) : conf;
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           return {
             type: d.type || 'other',
             label: d.label || 'Key Date',
             originalText: d.originalText || d.originalWording || d.dateString || 'Unspecified',
             normalizedDate,
             sourceText: d.sourceText || d.source || null,
+<<<<<<< HEAD
             section: sectionVal,
             page: pageVal,
             approximatePosition: approxPos,
             confidence: conf,
             relevance: rel
+=======
+            section: d.section || null,
+            page: pageVal,
+            confidence: typeof d.confidence === 'number' ? Math.min(1.0, Math.max(0, d.confidence)) : 0.90
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           };
         })
       : [];
@@ -383,6 +639,7 @@ Extract structured procurement data according to the requested JSON schema.`;
           const isConditional = doc.conditional !== undefined ? Boolean(doc.conditional) : (doc.requirementStatus === 'Conditional');
           const requirementType = doc.requirementType || (isMandatory ? 'must_submit' : (isConditional ? 'where_applicable' : 'may_submit'));
 
+<<<<<<< HEAD
           let pageVal = null;
           if (Number.isInteger(doc.page)) pageVal = doc.page;
 
@@ -397,6 +654,8 @@ Extract structured procurement data according to the requested JSON schema.`;
           const conf = typeof doc.confidence === 'number' ? Math.min(1, Math.max(0, doc.confidence)) : 0.90;
           const rel = typeof doc.relevance === 'number' ? Math.min(1, Math.max(0, doc.relevance)) : conf;
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           return {
             documentName: docName,
             category,
@@ -404,11 +663,17 @@ Extract structured procurement data according to the requested JSON schema.`;
             conditional: isConditional,
             requirementType,
             sourceText: doc.sourceText || doc.source || null,
+<<<<<<< HEAD
             section: sectionVal,
             page: pageVal,
             approximatePosition: approxPos,
             confidence: conf,
             relevance: rel
+=======
+            section: doc.section || null,
+            page: Number.isInteger(doc.page) ? doc.page : null,
+            confidence: typeof doc.confidence === 'number' ? Math.min(1, Math.max(0, doc.confidence)) : 0.90
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           };
         })
       : [];
@@ -436,6 +701,7 @@ Extract structured procurement data according to the requested JSON schema.`;
 
     // 8. Ambiguous Clauses
     const ambiguousClauses = Array.isArray(data.ambiguousClauses)
+<<<<<<< HEAD
       ? data.ambiguousClauses.map((ac) => {
           let pageVal = null;
           if (Number.isInteger(ac.page)) pageVal = ac.page;
@@ -461,6 +727,15 @@ Extract structured procurement data according to the requested JSON schema.`;
             relevance: rel
           };
         })
+=======
+      ? data.ambiguousClauses.map((ac) => ({
+          clauseText: ac.clauseText || ac.text || 'Ambiguous text',
+          section: ac.section || null,
+          page: Number.isInteger(ac.page) ? ac.page : null,
+          ambiguityReason: ac.ambiguityReason || 'Unclear scope or conditional phrasing',
+          confidence: typeof ac.confidence === 'number' ? ac.confidence : 0.60
+        }))
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       : [];
 
     // 9. Calculate Extraction Health Summary

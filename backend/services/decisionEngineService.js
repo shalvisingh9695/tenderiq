@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { generateContentWithRetry, GEMINI_PRIMARY_MODEL, Type } from '../config/gemini.js';
 import { parseSafeJson } from '../utils/jsonHelper.js';
+=======
+import { GoogleGenAI, Type } from '@google/genai';
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 /**
  * Helper to extract numeric monetary amount from text or numbers.
@@ -341,6 +345,7 @@ export class DecisionEngineService {
       criticalGaps: defaultGaps
     };
 
+<<<<<<< HEAD
     try {
       const majorRisksList = riskReport.topRisks || (riskReport.riskFactors || []).slice(0, 3).map(r => r.title || r);
 
@@ -370,6 +375,48 @@ export class DecisionEngineService {
       };
 
       const systemPrompt = `You are TenderIQ's Chief Bid Evaluation Analyst.
+=======
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (apiKey) {
+      try {
+        const ai = new GoogleGenAI({
+          apiKey,
+          httpOptions: {
+            headers: {
+              'User-Agent': 'aistudio-build'
+            }
+          }
+        });
+
+        const majorRisksList = riskReport.topRisks || (riskReport.riskFactors || []).slice(0, 3).map(r => r.title || r);
+
+        const promptInput = {
+          companyName,
+          tenderTitle: basicInfo.title || 'Procurement Tender',
+          recommendation,
+          winProbability,
+          eligibilityMatchScore,
+          riskImpactScore,
+          financialFitScore,
+          complianceScore,
+          eligibilityFailure,
+          keyMismatches: defaultGaps,
+          majorRiskFactors: majorRisksList,
+          companyProfileSummary: {
+            turnover: companyTurnover,
+            yearsExperience: companyYears,
+            certificationsCount: companyCerts.length,
+            isMSME
+          },
+          tenderRequirementsSummary: {
+            requiredTurnover,
+            requiredYears,
+            estimatedValue: basicInfo.estimatedValue || 'Unstated'
+          }
+        };
+
+        const systemPrompt = `You are TenderIQ's Chief Bid Evaluation Analyst.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 Your task is to generate a concise, professional, and strictly factual decision briefing explaining WHY the system arrived at the computed bid recommendation ("${recommendation}").
 
 STRICT RULES:
@@ -378,11 +425,16 @@ STRICT RULES:
 3. EXPLAIN WHY: Clearly explain the specific drivers for the ${recommendation} recommendation, win probability (${winProbability}%), and score breakdown.
 4. RETURN JSON ONLY: Match the exact JSON schema provided.`;
 
+<<<<<<< HEAD
       const userPrompt = `EVALUATION INPUT DATA:
+=======
+        const userPrompt = `EVALUATION INPUT DATA:
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 ${JSON.stringify(promptInput, null, 2)}
 
 Provide executive decisionSummary (2-3 sentences), key strengths (array of strings), weaknesses/liabilities (array of strings), and criticalGaps (array of strings).`;
 
+<<<<<<< HEAD
       const responseSchema = {
         type: Type.OBJECT,
         properties: {
@@ -419,6 +471,52 @@ Provide executive decisionSummary (2-3 sentences), key strengths (array of strin
     } catch (err) {
       console.warn('Gemini Decision Engine explanation fallback:', err.message || err);
       // Retain default deterministic explanation
+=======
+        const responseSchema = {
+          type: Type.OBJECT,
+          properties: {
+            decisionSummary: { type: Type.STRING },
+            strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
+            weaknesses: { type: Type.ARRAY, items: { type: Type.STRING } },
+            criticalGaps: { type: Type.ARRAY, items: { type: Type.STRING } }
+          },
+          required: ['decisionSummary', 'strengths', 'weaknesses', 'criticalGaps']
+        };
+
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: userPrompt,
+          config: {
+            systemInstruction: systemPrompt,
+            temperature: 0.2,
+            responseMimeType: 'application/json',
+            responseSchema
+          }
+        });
+
+        if (response.text) {
+          const cleanedJson = response.text
+            .trim()
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/```\s*$/i, '')
+            .trim();
+
+          const parsed = JSON.parse(cleanedJson);
+          if (parsed && typeof parsed.decisionSummary === 'string' && parsed.decisionSummary.length > 0) {
+            aiExplanation = {
+              decisionSummary: parsed.decisionSummary,
+              strengths: Array.isArray(parsed.strengths) && parsed.strengths.length > 0 ? parsed.strengths : defaultStrengths,
+              weaknesses: Array.isArray(parsed.weaknesses) && parsed.weaknesses.length > 0 ? parsed.weaknesses : defaultWeaknesses,
+              criticalGaps: Array.isArray(parsed.criticalGaps) ? parsed.criticalGaps : defaultGaps
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Gemini Decision Engine explanation fallback:', err.message);
+        // Retain default deterministic explanation
+      }
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     }
 
     // Combine or preserve critical gaps if mandatory failures exist

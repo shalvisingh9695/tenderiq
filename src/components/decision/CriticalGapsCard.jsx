@@ -1,6 +1,9 @@
 import React from 'react';
 import { AlertOctagon } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const CriticalGapsCard = ({ criticalGaps = [] }) => {
   if (!criticalGaps || criticalGaps.length === 0) return null;
@@ -18,11 +21,18 @@ export const CriticalGapsCard = ({ criticalGaps = [] }) => {
         {criticalGaps.map((gap, idx) => (
           <li key={idx} className="flex items-start gap-2 text-xs text-rose-950 font-medium bg-white/60 p-2.5 rounded-xl border border-rose-200/60">
             <span className="text-rose-600 font-bold">•</span>
+<<<<<<< HEAD
             <span>{extractText(gap)}</span>
+=======
+            <span>{gap}</span>
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </li>
         ))}
       </ul>
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

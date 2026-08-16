@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import { generateContentWithRetry, GEMINI_PRIMARY_MODEL, Type } from '../config/gemini.js';
 import { parseSafeJson } from '../utils/jsonHelper.js';
 
 /**
  * Advanced Risk Intelligence Engine Service for TenderIQ
  * Performs evidence-backed, explainable risk assessment traceable to tender clauses with page and position tracking.
+=======
+import { GoogleGenAI, Type } from '@google/genai';
+
+/**
+ * Advanced Risk Intelligence Engine Service for TenderIQ
+ * Performs evidence-backed, explainable risk assessment traceable to tender clauses.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
  */
 export class RiskIntelligenceService {
   /**
@@ -15,21 +23,49 @@ export class RiskIntelligenceService {
    * @returns {Promise<Object>} Structured Risk Intelligence Report
    */
   static async analyzeRisk({ tenderId, structuredAnalysis, documentText }) {
+<<<<<<< HEAD
+=======
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error(
+        'GEMINI_API_KEY environment variable is not configured. Please add GEMINI_API_KEY in Settings > Secrets.'
+      );
+    }
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     if (!structuredAnalysis) {
       throw new Error('Structured tender analysis is required before running Risk Intelligence.');
     }
 
+<<<<<<< HEAD
+=======
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build'
+        }
+      }
+    });
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     const maxChars = 80000;
     const truncatedText = (documentText || '').length > maxChars
       ? documentText.substring(0, maxChars) + '\n\n[...Document truncated for AI risk evaluation...]'
       : (documentText || '');
 
     const systemPrompt = `You are TenderIQ's Enterprise Risk Intelligence Engine.
+<<<<<<< HEAD
 Your task is to conduct an evidence-backed, explainable, and rigorous risk assessment of the provided tender document and structured procurement intelligence with page numbers, section headers, and approximate positions.
+=======
+Your task is to conduct an evidence-backed, explainable, and rigorous risk assessment of the provided tender document and structured procurement intelligence.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 STRICT RISK EVALUATION & SAFETY RULES:
 1. EVIDENCE-BASED ASSESSMENT:
    - EVERY reported risk factor, red flag, or penalty MUST be grounded directly in exact tender clauses or extracted requirements.
+<<<<<<< HEAD
    - Include "sourceText", "section", "page", "approximatePosition", "relevance", and "confidence" for every factor.
    - NEVER invent or fabricate clauses, penalties, financial figures, or risk conditions.
    - If evidence is insufficient or unstated in the document for a specific factor, mark as "Insufficient evidence".
@@ -85,6 +121,24 @@ Return ONLY a valid JSON object matching this structure:
   "topPositiveSignals": ["string"],
   "recommendedAreasToInvestigate": ["string"]
 }`;
+=======
+   - NEVER invent or fabricate clauses, penalties, financial figures, or risk conditions.
+   - If evidence is insufficient or unstated in the document for a specific factor, DO NOT claim a confirmed risk; mark as "Insufficient evidence".
+2. SEVERITY DIFFERENTIATION:
+   - Low: Minor administrative requirement or standard condition.
+   - Medium: Moderate requirement that demands planning but is achievable.
+   - High: Difficult or restrictive condition that can materially impair eligibility, cash flow, or operations.
+   - Critical: Extreme condition involving catastrophic financial exposure, immediate blacklisting/disqualification risks, or impossible delivery terms.
+3. BALANCED EVALUATION:
+   - Identify both Risk Factors AND Positive Signals (e.g. transparent criteria, reasonable payment terms, MSME/Startup exemptions, fair SLA grace periods).
+4. FINANCIAL EXPOSURE & PENALTY CALCULATION:
+   - Explicitly distinguish between "Explicitly Stated" values (e.g., EMD = $48,000) vs "Derived from stated tender values" (e.g., 10% BG = $240,000 derived from $2.4M estimated budget).
+   - If a numerical value is unstated, DO NOT calculate or fabricate one.
+5. EXPLAINABILITY:
+   - For every risk factor, explain clearly "Why is this risky?" in practical commercial/operational terms for a bidder.
+
+Return ONLY a valid JSON object strictly matching the requested schema.`;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
     const userPrompt = `TENDER ANALYSIS SUMMARY:
 ${JSON.stringify(structuredAnalysis, null, 2)}
@@ -94,16 +148,171 @@ ORIGINAL TENDER DOCUMENT TEXT:
 ${truncatedText}
 """
 
+<<<<<<< HEAD
 Evaluate financial, legal/contractual, operational, eligibility, and compliance risks, penalties, financial exposure, red flags, and positive signals according to the requested JSON format.`;
 
     try {
       const response = await generateContentWithRetry({
         model: GEMINI_PRIMARY_MODEL,
+=======
+Evaluate financial, legal/contractual, operational, eligibility, and compliance risks, penalties, financial exposure, red flags, and positive signals according to the schema.`;
+
+    // Schema definitions
+    const sourceTraceSchema = {
+      type: Type.OBJECT,
+      properties: {
+        title: { type: Type.STRING },
+        category: { type: Type.STRING }, // "financial" | "legal" | "operational" | "eligibility" | "compliance"
+        severity: { type: Type.STRING }, // "low" | "medium" | "high" | "critical"
+        scoreImpact: { type: Type.NUMBER }, // e.g. 10, 15, 25
+        explanation: { type: Type.STRING }, // Why is this risky?
+        sourceText: { type: Type.STRING },
+        section: { type: Type.STRING },
+        page: { type: Type.INTEGER },
+        confidence: { type: Type.NUMBER }
+      }
+    };
+
+    const categoryScoreSchema = {
+      type: Type.OBJECT,
+      properties: {
+        score: { type: Type.NUMBER }, // 0 to 100
+        level: { type: Type.STRING }, // "Very Low" | "Low" | "Moderate" | "High" | "Critical"
+        summary: { type: Type.STRING },
+        majorFactors: { type: Type.ARRAY, items: { type: Type.STRING } }
+      }
+    };
+
+    const penaltyItemSchema = {
+      type: Type.OBJECT,
+      properties: {
+        penaltyType: { type: Type.STRING }, // "Liquidated Damages", "Delay Penalty", "SLA Breach", "Termination", "Debarment/Blacklisting", "Security Forfeiture"
+        trigger: { type: Type.STRING },
+        financialConsequence: { type: Type.STRING },
+        sourceText: { type: Type.STRING },
+        section: { type: Type.STRING },
+        page: { type: Type.INTEGER },
+        confidence: { type: Type.NUMBER }
+      }
+    };
+
+    const financialExposureItemSchema = {
+      type: Type.OBJECT,
+      properties: {
+        commitmentName: { type: Type.STRING }, // EMD, Tender Fee, Performance BG, Security Deposit, Retention
+        amount: { type: Type.STRING },
+        derivationType: { type: Type.STRING }, // "Explicitly Stated" | "Derived from stated tender values"
+        paymentDeadline: { type: Type.STRING },
+        refundability: { type: Type.STRING },
+        sourceText: { type: Type.STRING },
+        section: { type: Type.STRING },
+        page: { type: Type.INTEGER },
+        confidence: { type: Type.NUMBER }
+      }
+    };
+
+    const responseSchema = {
+      type: Type.OBJECT,
+      properties: {
+        overallScore: { type: Type.NUMBER },
+        overallLevel: { type: Type.STRING }, // "Very Low" | "Low" | "Moderate" | "High" | "Critical"
+        executiveSummary: { type: Type.STRING },
+        categoryScores: {
+          type: Type.OBJECT,
+          properties: {
+            financialRisk: categoryScoreSchema,
+            legalRisk: categoryScoreSchema,
+            operationalRisk: categoryScoreSchema,
+            eligibilityRisk: categoryScoreSchema,
+            complianceRisk: categoryScoreSchema
+          }
+        },
+        riskFactors: {
+          type: Type.ARRAY,
+          items: sourceTraceSchema
+        },
+        redFlags: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              severity: { type: Type.STRING },
+              explanation: { type: Type.STRING },
+              sourceText: { type: Type.STRING },
+              section: { type: Type.STRING },
+              page: { type: Type.INTEGER },
+              confidence: { type: Type.NUMBER }
+            }
+          }
+        },
+        positiveSignals: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              explanation: { type: Type.STRING },
+              sourceText: { type: Type.STRING },
+              section: { type: Type.STRING },
+              page: { type: Type.INTEGER },
+              confidence: { type: Type.NUMBER }
+            }
+          }
+        },
+        penaltyAnalysis: {
+          type: Type.OBJECT,
+          properties: {
+            liquidatedDamages: penaltyItemSchema,
+            delayPenalties: penaltyItemSchema,
+            slaBreachPenalties: penaltyItemSchema,
+            terminationConsequences: penaltyItemSchema,
+            blacklistingRules: penaltyItemSchema,
+            securityForfeiture: penaltyItemSchema,
+            otherPenalties: { type: Type.ARRAY, items: penaltyItemSchema }
+          }
+        },
+        financialExposure: {
+          type: Type.OBJECT,
+          properties: {
+            totalEstimatedCommitment: { type: Type.STRING },
+            emd: financialExposureItemSchema,
+            tenderFee: financialExposureItemSchema,
+            performanceSecurity: financialExposureItemSchema,
+            securityDeposit: financialExposureItemSchema,
+            retentionAmount: financialExposureItemSchema,
+            exposureSummary: { type: Type.STRING }
+          }
+        },
+        topRisks: {
+          type: Type.ARRAY,
+          items: { type: Type.STRING }
+        },
+        topPositiveSignals: {
+          type: Type.ARRAY,
+          items: { type: Type.STRING }
+        },
+        recommendedAreasToInvestigate: {
+          type: Type.ARRAY,
+          items: { type: Type.STRING }
+        }
+      }
+    };
+
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         contents: userPrompt,
         config: {
           systemInstruction: systemPrompt,
           temperature: 0.1,
+<<<<<<< HEAD
           responseMimeType: 'application/json'
+=======
+          responseMimeType: 'application/json',
+          responseSchema
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         }
       });
 
@@ -112,6 +321,7 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
         throw new Error('Received empty response from Gemini AI risk model.');
       }
 
+<<<<<<< HEAD
       const parsedData = parseSafeJson(responseText);
       return RiskIntelligenceService.normalizeRiskReport(parsedData, structuredAnalysis);
 
@@ -128,10 +338,26 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
         finalErr.status = err.status || 500;
         throw finalErr;
       }
+=======
+      const cleanedJson = responseText
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```\s*$/i, '')
+        .trim();
+
+      const parsedData = JSON.parse(cleanedJson);
+      return RiskIntelligenceService.normalizeRiskReport(parsedData, structuredAnalysis);
+
+    } catch (err) {
+      console.error('RiskIntelligenceService execution error:', err);
+      const cleanErr = err.message ? err.message.replace(/key=[^&]+/gi, 'key=HIDDEN') : 'Risk calculation error.';
+      throw new Error(`Risk Intelligence evaluation failed: ${cleanErr}`);
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     }
   }
 
   /**
+<<<<<<< HEAD
    * Deterministic mathematical rule engine for risk evaluation when AI is rate-limited.
    */
   static generateRuleBasedRiskReport(structuredAnalysis = {}, documentText = '') {
@@ -225,6 +451,8 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
   }
 
   /**
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
    * Helper to classify a numeric score into a level string
    */
   static getRiskLevel(score) {
@@ -237,13 +465,17 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
 
   /**
    * Normalizes raw AI output into a guaranteed, clean Risk Intelligence Report structure
+<<<<<<< HEAD
    * with page numbers, sections, approximate positions, and relevance scores.
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
    */
   static normalizeRiskReport(data = {}, structuredAnalysis = {}) {
     const rawFactors = Array.isArray(data.riskFactors) ? data.riskFactors : [];
 
     const normFactor = (f) => {
       if (!f || !f.title) return null;
+<<<<<<< HEAD
       let pageVal = null;
       if (Number.isInteger(f.page)) pageVal = f.page;
 
@@ -258,6 +490,8 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
       const conf = typeof f.confidence === 'number' ? Math.min(1.0, Math.max(0, f.confidence)) : 0.90;
       const rel = typeof f.relevance === 'number' ? Math.min(1.0, Math.max(0, f.relevance)) : conf;
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       return {
         title: String(f.title),
         category: (f.category || 'general').toLowerCase(),
@@ -265,11 +499,17 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
         scoreImpact: typeof f.scoreImpact === 'number' ? f.scoreImpact : 10,
         explanation: f.explanation || 'Potential contractual or operational risk identified.',
         sourceText: f.sourceText || f.source || null,
+<<<<<<< HEAD
         section: sectionVal,
         page: pageVal,
         approximatePosition: approxPos,
         confidence: conf,
         relevance: rel
+=======
+        section: f.section || null,
+        page: Number.isInteger(f.page) ? f.page : null,
+        confidence: typeof f.confidence === 'number' ? Math.min(1.0, Math.max(0, f.confidence)) : 0.90
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       };
     };
 
@@ -278,6 +518,10 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
     // Calculate score dynamically if missing or default
     let calculatedScore = typeof data.overallScore === 'number' ? Math.round(data.overallScore) : null;
     if (calculatedScore === null || isNaN(calculatedScore)) {
+<<<<<<< HEAD
+=======
+      // Base score derived from critical/high factors
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       let scoreSum = 25; // baseline moderate
       riskFactors.forEach(f => {
         if (f.severity === 'critical') scoreSum += 25;
@@ -312,6 +556,7 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
 
     // Normalize Red Flags
     const redFlags = Array.isArray(data.redFlags)
+<<<<<<< HEAD
       ? data.redFlags.map(rf => {
           let pageVal = null;
           if (Number.isInteger(rf.page)) pageVal = rf.page;
@@ -337,10 +582,22 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
             relevance: rel
           };
         })
+=======
+      ? data.redFlags.map(rf => ({
+          title: rf.title || 'Significant Risk Clause Detected',
+          severity: (rf.severity || 'high').toLowerCase(),
+          explanation: rf.explanation || 'Clause poses notable contractual risk.',
+          sourceText: rf.sourceText || rf.source || null,
+          section: rf.section || null,
+          page: Number.isInteger(rf.page) ? rf.page : null,
+          confidence: typeof rf.confidence === 'number' ? rf.confidence : 0.92
+        }))
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       : [];
 
     // Normalize Positive Signals
     const positiveSignals = Array.isArray(data.positiveSignals)
+<<<<<<< HEAD
       ? data.positiveSignals.map(ps => {
           let pageVal = null;
           if (Number.isInteger(ps.page)) pageVal = ps.page;
@@ -365,11 +622,22 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
             relevance: rel
           };
         })
+=======
+      ? data.positiveSignals.map(ps => ({
+          title: ps.title || 'Favorable Condition',
+          explanation: ps.explanation || 'Clause aligns with standard vendor-friendly practices.',
+          sourceText: ps.sourceText || ps.source || null,
+          section: ps.section || null,
+          page: Number.isInteger(ps.page) ? ps.page : null,
+          confidence: typeof ps.confidence === 'number' ? ps.confidence : 0.95
+        }))
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       : [];
 
     // Normalize Penalty Analysis
     const normPenalty = (p, defaultType) => {
       if (!p) return null;
+<<<<<<< HEAD
       let pageVal = null;
       if (Number.isInteger(p.page)) pageVal = p.page;
       const sectionVal = p.section || null;
@@ -382,16 +650,24 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
       const conf = typeof p.confidence === 'number' ? p.confidence : 0.90;
       const rel = typeof p.relevance === 'number' ? p.relevance : conf;
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       return {
         penaltyType: p.penaltyType || defaultType,
         trigger: p.trigger || 'Clause breach or milestone delay',
         financialConsequence: p.financialConsequence || 'As specified in clause',
         sourceText: p.sourceText || p.source || null,
+<<<<<<< HEAD
         section: sectionVal,
         page: pageVal,
         approximatePosition: approxPos,
         confidence: conf,
         relevance: rel
+=======
+        section: p.section || null,
+        page: Number.isInteger(p.page) ? p.page : null,
+        confidence: typeof p.confidence === 'number' ? p.confidence : 0.90
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       };
     };
 
@@ -410,6 +686,7 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
     // Normalize Financial Exposure
     const normExposure = (fe, defaultName) => {
       if (!fe) return null;
+<<<<<<< HEAD
       let pageVal = null;
       if (Number.isInteger(fe.page)) pageVal = fe.page;
       const sectionVal = fe.section || null;
@@ -422,6 +699,8 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
       const conf = typeof fe.confidence === 'number' ? fe.confidence : 0.90;
       const rel = typeof fe.relevance === 'number' ? fe.relevance : conf;
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       return {
         commitmentName: fe.commitmentName || defaultName,
         amount: fe.amount || 'Unstated',
@@ -429,11 +708,17 @@ Evaluate financial, legal/contractual, operational, eligibility, and compliance 
         paymentDeadline: fe.paymentDeadline || 'Upon bid submission',
         refundability: fe.refundability || 'Subject to tender terms',
         sourceText: fe.sourceText || fe.source || null,
+<<<<<<< HEAD
         section: sectionVal,
         page: pageVal,
         approximatePosition: approxPos,
         confidence: conf,
         relevance: rel
+=======
+        section: fe.section || null,
+        page: Number.isInteger(fe.page) ? fe.page : null,
+        confidence: typeof fe.confidence === 'number' ? fe.confidence : 0.90
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       };
     };
 

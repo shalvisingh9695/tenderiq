@@ -1,6 +1,9 @@
 import React from 'react';
 import { Scale, AlertTriangle, ShieldX, Clock, FileText, Lock, FileSpreadsheet, ExternalLink } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const ContractTermsCard = ({ commercialTerms = {}, onOpenSource }) => {
   const {
@@ -20,6 +23,7 @@ export const ContractTermsCard = ({ commercialTerms = {}, onOpenSource }) => {
     otherObligations = []
   } = commercialTerms;
 
+<<<<<<< HEAD
   const ldVal = extractText(liquidatedDamages);
   const penVal = extractText(penalties);
   const durVal = extractText(contractDuration);
@@ -28,6 +32,16 @@ export const ContractTermsCard = ({ commercialTerms = {}, onOpenSource }) => {
   const blVal = extractText(blacklistingConditions);
   const arbVal = extractText(arbitration) || extractText(disputeResolution);
   const fmVal = extractText(forceMajeure);
+=======
+  const ldVal = typeof liquidatedDamages === 'object' ? liquidatedDamages?.value : liquidatedDamages;
+  const penVal = typeof penalties === 'object' ? penalties?.value : penalties;
+  const durVal = typeof contractDuration === 'object' ? contractDuration?.value : contractDuration;
+  const warVal = typeof warrantyRequirements === 'object' ? warrantyRequirements?.value : warrantyRequirements;
+  const termVal = typeof terminationConditions === 'object' ? terminationConditions?.value : terminationConditions;
+  const blVal = typeof blacklistingConditions === 'object' ? blacklistingConditions?.value : blacklistingConditions;
+  const arbVal = typeof arbitration === 'object' ? arbitration?.value : (typeof disputeResolution === 'object' ? disputeResolution?.value : (arbitration || disputeResolution));
+  const fmVal = typeof forceMajeure === 'object' ? forceMajeure?.value : forceMajeure;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
   return (
     <div className="glass-card p-6 rounded-2xl border border-orange-100/90 space-y-6">
@@ -196,4 +210,7 @@ export const ContractTermsCard = ({ commercialTerms = {}, onOpenSource }) => {
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

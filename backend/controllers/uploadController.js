@@ -1,5 +1,8 @@
 import path from 'path';
+<<<<<<< HEAD
 import fs from 'fs';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 import { TenderModel } from '../models/tenderModel.js';
 import { formatBytes, validateFileType, extractTextFromBuffer, generatePreviewSnippet } from '../services/storageService.js';
 
@@ -26,6 +29,7 @@ export async function handleFileUpload(req, res) {
     const id = `tnd_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const formattedSize = formatBytes(file.size);
 
+<<<<<<< HEAD
     const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
     if (!fs.existsSync(UPLOADS_DIR)) {
       fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -33,6 +37,8 @@ export async function handleFileUpload(req, res) {
     const savedFilePath = path.join(UPLOADS_DIR, `${id}${extension}`);
     fs.writeFileSync(savedFilePath, file.buffer);
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     // Extract text from uploaded document buffer
     const extractedText = await extractTextFromBuffer(file.buffer, file.originalname, file.mimetype);
     const previewSnippet = generatePreviewSnippet(file.buffer, file.originalname, extractedText);
@@ -48,8 +54,12 @@ export async function handleFileUpload(req, res) {
       uploadedAt: new Date().toISOString(),
       status: 'uploaded',
       previewSnippet,
+<<<<<<< HEAD
       filePath: savedFilePath,
       fileUrl: `/api/tenders/${id}/file`,
+=======
+      filePath: file.path,
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       extractedText,
       analysisStatus: 'ready',
       analyzedAt: null,

@@ -129,7 +129,10 @@ export const RiskDashboardSection = ({
       {/* 3. Category Score Breakdown */}
       <RiskCategoryBreakdown
         categoryScores={riskReport.categoryScores}
+<<<<<<< HEAD
         onOpenSource={onOpenSource}
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       />
 
       {/* 4. Penalty & Liability Matrix */}

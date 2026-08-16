@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { CompanyProfileForm } from './CompanyProfileForm';
 import { DecisionPanel } from './DecisionPanel';
 import { Sparkles, AlertCircle, Edit3, ArrowRight, ShieldCheck } from 'lucide-react';
+<<<<<<< HEAD
 import { safeFetchJson } from '../../utils/apiHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const DecisionSection = ({ activeDoc, onUpdateTenderData }) => {
   const [decisionData, setDecisionData] = useState(() => activeDoc?.decisionReport || null);
@@ -26,7 +29,11 @@ export const DecisionSection = ({ activeDoc, onUpdateTenderData }) => {
     setError(null);
 
     try {
+<<<<<<< HEAD
       const data = await safeFetchJson(`/api/tenders/${activeDoc.id}/decision`, {
+=======
+      const response = await fetch(`/api/tenders/${activeDoc.id}/decision`, {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -34,6 +41,15 @@ export const DecisionSection = ({ activeDoc, onUpdateTenderData }) => {
         body: JSON.stringify({ companyProfile })
       });
 
+<<<<<<< HEAD
+=======
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to evaluate bid decision.');
+      }
+
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       setDecisionData(data);
       setMode('view');
 

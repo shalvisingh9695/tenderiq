@@ -50,7 +50,11 @@ export const HomePage = ({ onNavigate }) => {
                   onClick={() => onNavigate('dashboard')}
                   className="px-6 py-4 rounded-xl text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 font-semibold text-base flex items-center justify-center gap-2 shadow-2xs transition-all hover:border-orange-200"
                 >
+<<<<<<< HEAD
                   Open Dashboard
+=======
+                  View Demo Dashboard
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
                   <ArrowUpRight className="w-4 h-4 text-slate-400" />
                 </button>
               </div>

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { ListChecks, FileText, Filter, CheckCircle2, AlertTriangle, Search, Tag, ExternalLink } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const MandatoryDocsChecklist = ({ mandatoryDocuments = [], onOpenSource }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -17,6 +20,7 @@ export const MandatoryDocsChecklist = ({ mandatoryDocuments = [], onOpenSource }
   }
 
   // Extract unique categories
+<<<<<<< HEAD
   const categories = ['All', ...new Set(mandatoryDocuments.map(d => extractText(d.category, 'Other')))];
 
   // Filter documents
@@ -27,19 +31,38 @@ export const MandatoryDocsChecklist = ({ mandatoryDocuments = [], onOpenSource }
     const matchesSearch = !searchQuery || 
       docName.toLowerCase().includes(searchQuery.toLowerCase()) || 
       docCat.toLowerCase().includes(searchQuery.toLowerCase());
+=======
+  const categories = ['All', ...new Set(mandatoryDocuments.map(d => d.category || 'Other'))];
+
+  // Filter documents
+  const filteredDocs = mandatoryDocuments.filter((doc) => {
+    const matchesCategory = selectedCategory === 'All' || doc.category === selectedCategory;
+    const matchesSearch = !searchQuery || 
+      doc.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      doc.category?.toLowerCase().includes(searchQuery.toLowerCase());
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
     return matchesCategory && matchesSearch;
   });
 
   const getRequirementBadge = (status) => {
+<<<<<<< HEAD
     const st = (extractText(status) || '').toLowerCase();
     if (st.includes('mandatory') || st.includes('must')) {
+=======
+    const st = (status || '').toLowerCase();
+    if (st.includes('mandatory')) {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       return (
         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200">
           Mandatory
         </span>
       );
     }
+<<<<<<< HEAD
     if (st.includes('conditional') || st.includes('applicable')) {
+=======
+    if (st.includes('conditional')) {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
       return (
         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
           Conditional
@@ -114,6 +137,7 @@ export const MandatoryDocsChecklist = ({ mandatoryDocuments = [], onOpenSource }
       {/* Document List */}
       <div className="space-y-2.5">
         {filteredDocs.length > 0 ? (
+<<<<<<< HEAD
           filteredDocs.map((doc, idx) => {
             const docName = extractText(doc.documentName || doc.name || doc);
             const docCat = extractText(doc.category, 'General');
@@ -170,6 +194,57 @@ export const MandatoryDocsChecklist = ({ mandatoryDocuments = [], onOpenSource }
               </div>
             );
           })
+=======
+          filteredDocs.map((doc, idx) => (
+            <div 
+              key={idx}
+              className="p-3.5 bg-slate-50/80 hover:bg-white rounded-xl border border-slate-100 hover:border-orange-200 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 space-y-0.5">
+                  <p className="font-semibold text-slate-900 text-sm">
+                    {doc.documentName || doc.name}
+                  </p>
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                    <span className="font-medium text-slate-600">{doc.category || 'General'}</span>
+                    {(doc.section || doc.source) && (
+                      <>
+                        <span>•</span>
+                        <span>{doc.section || doc.source}</span>
+                      </>
+                    )}
+                    {doc.page && (
+                      <span>(Pg {doc.page})</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+                {onOpenSource && (
+                  <button
+                    onClick={() => onOpenSource({
+                      value: `${doc.documentName || doc.name} (${doc.category || 'General'})`,
+                      sourceText: doc.sourceText || doc.source,
+                      section: doc.section || doc.source,
+                      page: doc.page,
+                      confidence: doc.confidence,
+                      requirementType: doc.requirementType || (doc.mandatory ? 'must_submit' : 'where_applicable')
+                    })}
+                    className="text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 text-[11px] cursor-pointer hover:underline"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    View Source
+                  </button>
+                )}
+                {getRequirementBadge(doc.requirementType || doc.requirementStatus)}
+              </div>
+            </div>
+          ))
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         ) : (
           <div className="p-8 text-center text-slate-400 text-xs italic">
             No documents match the selected category or filter.

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -71,3 +72,21 @@ async function startServer() {
 startServer().catch((err) => {
   console.error('Failed to start server:', err);
 });
+=======
+import express from "express";
+
+const app = express();
+const PORT = process.env.PORT || 10000;
+
+app.get("/", (req, res) => {
+  res.send("TenderIQ Backend Running 🚀");
+});
+
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server running on port " + PORT);
+});
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Cpu, CheckCircle2, Users, Wrench, ShieldAlert, Layers, ExternalLink } from 'lucide-react';
+<<<<<<< HEAD
 import { extractText, extractTextList } from '../../utils/textHelper';
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
 export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) => {
   const {
@@ -15,12 +18,18 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
     qualityStandards = []
   } = technicalRequirements;
 
+<<<<<<< HEAD
   const scopeVal = extractText(scopeOfWork);
   const manpowerVal = extractText(minimumManpower);
   const deliveryVal = extractText(deliveryRequirements);
   const specsList = extractTextList(technicalSpecifications);
   const slaList = extractTextList(serviceLevelRequirements);
   const qualityList = extractTextList(qualityStandards);
+=======
+  const scopeVal = typeof scopeOfWork === 'object' ? scopeOfWork?.value : scopeOfWork;
+  const manpowerVal = typeof minimumManpower === 'object' ? minimumManpower?.value : minimumManpower;
+  const deliveryVal = typeof deliveryRequirements === 'object' ? deliveryRequirements?.value : deliveryRequirements;
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
 
   return (
     <div className="glass-card p-6 rounded-2xl border border-orange-100/90 space-y-6">
@@ -72,11 +81,19 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
         <div className="space-y-3">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-orange-500" />
+<<<<<<< HEAD
             Technical Specifications ({specsList.length})
           </label>
           {specsList.length > 0 ? (
             <div className="space-y-1.5 text-xs text-slate-700">
               {specsList.map((spec, i) => (
+=======
+            Technical Specifications ({technicalSpecifications.length})
+          </label>
+          {technicalSpecifications.length > 0 ? (
+            <div className="space-y-1.5 text-xs text-slate-700">
+              {technicalSpecifications.map((spec, i) => (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
                 <div key={i} className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
                   <CheckCircle2 className="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5" />
                   <span>{spec}</span>
@@ -94,9 +111,15 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
             <ShieldAlert className="w-3.5 h-3.5 text-orange-500" />
             Service Level Requirements (SLAs)
           </label>
+<<<<<<< HEAD
           {slaList.length > 0 ? (
             <div className="space-y-1.5 text-xs text-slate-700">
               {slaList.map((sla, i) => (
+=======
+          {serviceLevelRequirements.length > 0 ? (
+            <div className="space-y-1.5 text-xs text-slate-700">
+              {serviceLevelRequirements.map((sla, i) => (
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
                 <div key={i} className="flex items-start gap-2 bg-amber-50/60 p-2.5 rounded-lg border border-amber-200/60">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0 mt-1.5" />
                   <span>{sla}</span>
@@ -120,7 +143,11 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
             Minimum Manpower
           </span>
           <p className="text-xs text-slate-800 font-medium">
+<<<<<<< HEAD
             {manpowerVal || 'As per project execution plan'}
+=======
+            {minimumManpower || 'As per project execution plan'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
         </div>
 
@@ -131,7 +158,11 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
             Delivery Schedule
           </span>
           <p className="text-xs text-slate-800 font-medium">
+<<<<<<< HEAD
             {deliveryVal || 'Specified in contractual terms'}
+=======
+            {deliveryRequirements || 'Specified in contractual terms'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
         </div>
 
@@ -142,7 +173,11 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
             Quality Standards
           </span>
           <p className="text-xs text-slate-800 font-medium truncate">
+<<<<<<< HEAD
             {qualityList.length > 0 ? qualityList.join(', ') : 'Standard ISO/Industry Norms'}
+=======
+            {qualityStandards.length > 0 ? qualityStandards.join(', ') : 'Standard ISO/Industry Norms'}
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </p>
         </div>
 
@@ -151,4 +186,7 @@ export const TechnicalReqsCard = ({ technicalRequirements = {}, onOpenSource }) 
     </div>
   );
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1

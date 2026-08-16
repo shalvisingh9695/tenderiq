@@ -1,7 +1,13 @@
 import React from 'react';
+<<<<<<< HEAD
 import { X, FileText, CheckCircle2, AlertTriangle, HelpCircle, ShieldCheck, Bookmark, ExternalLink } from 'lucide-react';
 
 export const SourceViewModal = ({ isOpen, onClose, sourceData, title, onOpenPdf }) => {
+=======
+import { X, FileText, CheckCircle2, AlertTriangle, HelpCircle, ShieldCheck, Bookmark } from 'lucide-react';
+
+export const SourceViewModal = ({ isOpen, onClose, sourceData, title }) => {
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
   if (!isOpen || !sourceData) return null;
 
   const {
@@ -146,6 +152,7 @@ export const SourceViewModal = ({ isOpen, onClose, sourceData, title, onOpenPdf 
         </div>
 
         {/* Modal Footer */}
+<<<<<<< HEAD
         <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
           {onOpenPdf && (
             <button
@@ -171,6 +178,14 @@ export const SourceViewModal = ({ isOpen, onClose, sourceData, title, onOpenPdf 
             className="btn-primary-orange px-5 py-2 text-xs font-semibold rounded-xl cursor-pointer"
           >
             Close
+=======
+        <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 text-right shrink-0">
+          <button
+            onClick={onClose}
+            className="btn-primary-orange px-5 py-2 text-xs font-semibold rounded-xl cursor-pointer"
+          >
+            Close Verification
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
           </button>
         </div>
 

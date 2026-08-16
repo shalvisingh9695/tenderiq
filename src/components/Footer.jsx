@@ -34,7 +34,11 @@ export const Footer = ({ onNavigate }) => {
 
         {/* Phase Info */}
         <div className="text-[11px] text-slate-400 font-medium">
+<<<<<<< HEAD
           © 2026 TenderIQ — AI Tender &amp; Procurement Intelligence Platform.
+=======
+          © 2026 TenderIQ Inc. Phase 1 Foundation.
+>>>>>>> 11a40448ad7b423ee66a3ef5abb6259ffadc0ad1
         </div>
 
       </div>
